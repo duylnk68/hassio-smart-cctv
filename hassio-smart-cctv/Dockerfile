@@ -1,4 +1,4 @@
-ARG BUILD_FROM=ubuntu:bionic-20200112
+ARG BUILD_FROM
 FROM ${BUILD_FROM}
 
 # Set shell
