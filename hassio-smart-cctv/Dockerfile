@@ -5,7 +5,7 @@ FROM ${BUILD_FROM}
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 
 # Initialize package
-RUN apt-get update && apt-get install -y openssh-server python3-pip
+RUN apt-get update && apt-get install -y openssh-server python3-pip python3-opencv
 
 # Initialize OpenSSH
 RUN mkdir /var/run/sshd
