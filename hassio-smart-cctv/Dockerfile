@@ -4,6 +4,9 @@ FROM ${BUILD_FROM}
 # Set shell
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 
+# Avoid tzdata asks for "Geographic area" and "Time zone"
+ARG DEBIAN_FRONTEND=noninteractive
+
 # Initialize package
 RUN apt-get update && apt-get install -y openssh-server python3-pip python3-opencv
 
