@@ -1,0 +1,11 @@
+{
+  "image": "duylnk68/ubuntu-base-{arch}",
+  "squash": false,
+  "build_from": {
+    "aarch64": "arm64v8/ubuntu:bionic-20200112",
+    "amd64": "ubuntu:bionic-20200112",
+    "armv7": "arm32v7/ubuntu:bionic-20200112",
+    "i386": "i386/ubuntu:bionic-20200112"
+  },
+  "args": {}
+}
