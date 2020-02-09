@@ -2,12 +2,10 @@ ARG BUILD_FROM=ubuntu:stable
 
 FROM ${BUILD_FROM}
 
-RUN apt-get update
-RUN apt-get install -y --force-yes nano wget curl openssh-server
+RUN apt-get update && apt-get install -y nano wget curl openssh-server
 
 RUN mkdir /var/run/sshd
 RUN echo 'root:123456' | chpasswd
-RUN sed -i 's/PermitRootLogin prohibit-password/PermitRootLogin yes/' /etc/ssh/sshd_config
 RUN sed -i 's/PermitRootLogin prohibit-password/PermitRootLogin yes/' /etc/ssh/sshd_config
 
 # SSH login fix. Otherwise user is kicked off after login
