@@ -1,4 +1,4 @@
-ARG BUILD_FROM=ubuntu:stable
+ARG BUILD_FROM=ubuntu:latest
 
 FROM ${BUILD_FROM}
 
