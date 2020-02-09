@@ -1,5 +1,4 @@
-ARG BUILD_FROM=hassioaddons/ubuntu-base
-
+ARG BUILD_FROM
 FROM ${BUILD_FROM}
 
 # Set shell
