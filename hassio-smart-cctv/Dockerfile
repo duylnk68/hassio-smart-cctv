@@ -9,6 +9,7 @@ ARG DEBIAN_FRONTEND=noninteractive
 
 # Initialize package
 RUN apt-get update && apt-get install -y openssh-server python3-pip python3-opencv
+pip3 install opencv-contrib-python
 
 # Initialize OpenSSH
 RUN mkdir /var/run/sshd
