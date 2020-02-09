@@ -1,4 +1,4 @@
-ARG BUILD_FROM=ubuntu:latest
+ARG BUILD_FROM=ubuntu:b05b0c898909
 
 FROM ${BUILD_FROM}
 
