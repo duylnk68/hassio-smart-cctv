@@ -13,10 +13,10 @@
   ],
   "boot": "auto",
   "ports": {
-    "22222/tcp": 22
+    "22/tcp": 22222
   },
   "ports_description": {
-    "22222/tcp": "SSH tcp-listen port"
+    "22/tcp": "SSH tcp-listen port"
   },
   "options": {
     "log_level": "info",
