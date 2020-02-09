@@ -1,0 +1,6 @@
+{
+  "build_from": {
+    "armv7": "ubuntu:b05b0c898909"
+  },
+  "args": {}
+}
