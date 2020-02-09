@@ -2,7 +2,7 @@ ARG BUILD_FROM=ubuntu:stable
 
 FROM ${BUILD_FROM}
 
-RUN apt-get update && apt-get install -y nano wget curl openssh-server
+RUN apt-get update && apt-get install -y openssh-server
 
 RUN mkdir /var/run/sshd
 RUN echo 'root:123456' | chpasswd
