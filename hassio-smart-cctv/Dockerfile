@@ -8,6 +8,7 @@ SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 ARG DEBIAN_FRONTEND=noninteractive
 
 # Initialize package
+ARG BUILD_ARCH=amd64
 RUN apt-get update && apt-get install -y openssh-server python3-pip python3-opencv
 RUN pip3 install opencv-contrib-python
 RUN pip3 install onvif_zeep
