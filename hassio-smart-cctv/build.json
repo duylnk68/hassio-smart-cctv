@@ -1,11 +1,9 @@
 {
-  "image": "duylnk68/ubuntu-base-{arch}",
-  "squash": false,
   "build_from": {
-    "aarch64": "arm64v8/ubuntu:bionic-20200112",
-    "amd64": "ubuntu:bionic-20200112",
-    "armv7": "arm32v7/ubuntu:bionic-20200112",
-    "i386": "i386/ubuntu:bionic-20200112"
+    "aarch64": "hassioaddons/ubuntu-base-aarch64:4.0.3",
+    "amd64": "hassioaddons/ubuntu-base-amd64:4.0.3",
+    "armv7": "hassioaddons/ubuntu-base-armv7:4.0.3",
+    "i386": "hassioaddons/ubuntu-base-i386:4.0.3"
   },
   "args": {}
 }
