@@ -1,0 +1,29 @@
+{
+  "name": "hassio-smart-cctv",
+  "version": "1.0.0",
+  "slug": "hassio-smart-cctv",
+  "description": "Hassio Smart CCTV",
+  "url": "https://github.com/duylnk68/hassio-smart-cctv",
+  "startup": "application",
+  "arch": [
+    "aarch64",
+    "amd64",
+    "armhf",
+    "i386"
+  ],
+  "boot": "auto",
+  "ports": {
+    "22222/tcp": 22222
+  },
+  "ports_description": {
+    "22222/tcp": "SSH tcp-listen port"
+  },
+  "options": {
+    "log_level": "info",
+    "seconds_between_quotes": 5
+  },
+  "schema": {
+    "log_level": "match(^(trace|debug|info|notice|warning|error|fatal)$)",
+    "seconds_between_quotes": "int(1,120)"
+  }
+}
