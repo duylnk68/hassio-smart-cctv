@@ -1,4 +1,4 @@
-ARG BUILD_FROM=ubuntu:latest
+ARG BUILD_FROM
 FROM ${BUILD_FROM}
 
 # Set shell
