@@ -13,7 +13,7 @@
   ],
   "boot": "auto",
   "map": [
-    "share:r"
+    "share:rw"
   ],
   "ports": {
     "22/tcp": 22222
