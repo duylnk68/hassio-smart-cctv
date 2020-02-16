@@ -16,7 +16,7 @@ class Camera(transports.Transport, threading.Thread):
     
     def __init__(self, host, port, user, pwd):
         threading.Thread.__init__(self)
-        transports.Transport.__init__(self)
+        transports.Transport.__init__(self, timeout=5)
         self._Host = host
         self._Port = port
         self._User = user
