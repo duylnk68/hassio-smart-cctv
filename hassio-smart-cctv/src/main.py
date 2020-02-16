@@ -1,6 +1,3 @@
-import os
-clear = lambda: os.system('cls')
-clear()
 from datetime import timedelta, datetime
 import time
 from camera import Camera
