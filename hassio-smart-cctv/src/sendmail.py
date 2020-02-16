@@ -47,7 +47,10 @@ class Email(threading.Thread):
                 continue
             
             # Send mail!
-            self._SendEmail(self._queue.get())
+            try:
+                self._SendEmail(self._queue.get())
+            except:
+                pass
 
     def SendMail(self, to, subject, body, attachments):
         _message = Email._Message(to, subject, body, attachments)
