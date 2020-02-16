@@ -11,9 +11,9 @@ ARG DEBIAN_FRONTEND=noninteractive
 ARG BUILD_ARCH=amd64
 RUN apt-get update && apt-get install -y openssh-server python3-pip python3-opencv
 #RUN pip3 install opencv-contrib-python
-RUN pip3 install onvif_zeep
-RUN pip3 install xmltodict
-RUN pip3 install pyyaml
+#RUN pip3 install onvif_zeep
+#RUN pip3 install xmltodict
+#RUN pip3 install pyyaml
 
 # Initialize OpenSSH
 RUN mkdir /var/run/sshd
