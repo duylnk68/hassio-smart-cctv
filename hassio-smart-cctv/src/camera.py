@@ -1,5 +1,6 @@
 from onvif import ONVIFCamera, ONVIFService
 from zeep import transports
+import zeep
 import threading
 import requests
 import xmltodict
@@ -16,11 +17,18 @@ class Camera(transports.Transport, threading.Thread):
     
     def __init__(self, host, port, user, pwd):
         threading.Thread.__init__(self)
-        transports.Transport.__init__(self, timeout=5)
+        transports.Transport.__init__(self)
         self._Host = host
         self._Port = port
         self._User = user
         self._Pwd = pwd
+
+        # Patch zeep.xsd.AnySimpleType.pythonvalue 
+        zeep.xsd.AnySimpleType.pythonvalue = self._patched_zeep_pythonvalue
+
+    # Work arround: NotImplementedError: AnySimpleType.pytonvalue() not implemented
+    def _patched_zeep_pythonvalue(self, xmlvalue):
+        return xmlvalue
 
     def post(self, address, message, headers):
         self.xml_request = message.decode('utf-8')
@@ -46,8 +54,6 @@ class Camera(transports.Transport, threading.Thread):
     def _Loop(self):
         self._log('i', "Initializing...")
         cam = ONVIFCamera(self._Host, self._Port, self._User, self._Pwd, transport=self)
-        self._log('i', "Updating XAddrs...")
-        cam.update_xaddrs()
         self._log('i', "Getting Snapshot Uri...")
         self._SnapshotUri = self.getSnapshotUri(cam).Uri
         self._log('i', "Creating PullPoint Service...")
