@@ -7,6 +7,13 @@ import threading
 import queue
 
 class Email(threading.Thread):
+    class Attachment:
+        Filename = None
+        Data = None
+        def __init__(self, filename, data):
+            self.Filename = filename
+            self.Data = data
+
     class _Message:
         To = None
         Subject = None
@@ -52,7 +59,7 @@ class Email(threading.Thread):
             except:
                 pass
 
-    def SendMail(self, to, subject, body, attachments):
+    def SendMail(self, to, subject, body, attachments: [Attachment]):
         _message = Email._Message(to, subject, body, attachments)
         self._queue.put(_message)
 
@@ -74,18 +81,18 @@ class Email(threading.Thread):
 
         # Attach binary attachments
         if _message.Attachments is not None:
-            for key, value in _message.Attachments:
+            for value in _message.Attachments:
                 # Create instance of MIMEBase and named as attachment 
                 attachment = MIMEBase('application', 'octet-stream')
 
                 # Set payload
-                attachment.set_payload(value)
+                attachment.set_payload(value.Data)
 
                 # encode into base64 
                 encoders.encode_base64(attachment)
 
                 # Set header (attachment name)
-                attachment.add_header('Content-Disposition', "attachment; filename= %s" % key)
+                attachment.add_header('Content-Disposition', "attachment; filename= %s" % value.Filename)
 
                 # attach the instance 'p' to instance 'msg' 
                 msg.attach(attachment)
