@@ -1,3 +1,4 @@
+import os.path
 from datetime import timedelta, datetime
 import time
 from camera import Camera
@@ -7,7 +8,11 @@ from obj_detect import ObjDetect
 
 def main():
     # Load configuration
-    config = Config("config.yaml")
+    config = None
+    if os.path.isfile('config.yaml'):
+        config = Config('config.yaml')
+    else:
+        config = Config('/share/hassio-smart-cctv/config.yaml')
 
     # Create SMTP instance!
     email = Email(config.smtp.Host, config.smtp.Port, config.smtp.UseTLS, config.smtp.Username, config.smtp.Password)
