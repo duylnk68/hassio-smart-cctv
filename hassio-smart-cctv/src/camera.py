@@ -5,6 +5,7 @@ import threading
 import requests
 import xmltodict
 import time
+import datetime
 
 class Camera(transports.Transport, threading.Thread):
     IsMotion = False
@@ -14,10 +15,13 @@ class Camera(transports.Transport, threading.Thread):
     _User = None
     _Pwd = None
     _KeepRunning = True
+    _PullMsgLimit = 1
+    _PullMsgTimeout = datetime.timedelta(seconds=1)
+    _TransportTimeout = 10
     
     def __init__(self, host, port, user, pwd):
         threading.Thread.__init__(self)
-        transports.Transport.__init__(self)
+        transports.Transport.__init__(self, timeout=self._TransportTimeout, operation_timeout=self._TransportTimeout)
         self._Host = host
         self._Port = port
         self._User = user
@@ -61,7 +65,7 @@ class Camera(transports.Transport, threading.Thread):
         self._log('i', "The operation completed successfully!")
         while(True):
             # Pull message!
-            pullpoint.PullMessages({"Timeout":"PT1S", "MessageLimit":1})
+            pullpoint.PullMessages({"Timeout":self._PullMsgTimeout, "MessageLimit":self._PullMsgLimit})
             
             # Convert response message into a dictionary!
             msg = xmltodict.parse(cam.transport.response.text)
