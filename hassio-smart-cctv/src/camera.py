@@ -40,6 +40,10 @@ class Camera(transports.Transport, threading.Thread):
         self.response = response
         return response
 
+    @property
+    def Hostname(self):
+        return self._Host
+
     def getSnapshotUri(self, cam: ONVIFCamera):
         media = cam.create_media_service()
         profiles = media.GetProfiles()
