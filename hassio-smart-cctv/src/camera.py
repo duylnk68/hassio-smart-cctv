@@ -61,7 +61,7 @@ class Camera(transports.Transport, threading.Thread):
 
     def _Loop(self):
         self._log('i', "Initializing...")
-        cam = ONVIFCamera(self._Host, self._Port, self._User, self._Pwd, transport=self)
+        cam = ONVIFCamera(self._Host, self._Port, self._User, self._Pwd, './wsdl/', transport=self)
         self._log('i', "Getting Snapshot Uri...")
         self._SnapshotUri = self.getSnapshotUri(cam).Uri
         self._log('i', "Creating PullPoint Service...")
