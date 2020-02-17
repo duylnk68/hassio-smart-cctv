@@ -1,5 +1,5 @@
-ARG BUILD_FROM
-FROM ${BUILD_FROM}
+#ARG BUILD_FROM
+FROM ubuntu:latest
 
 # Set shell
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
@@ -8,8 +8,11 @@ SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 ARG DEBIAN_FRONTEND=noninteractive
 
 # Initialize package
-ARG BUILD_ARCH=amd64
-RUN apt-get update && apt-get install -y openssh-server python3-pip python3-opencv
+#ARG BUILD_ARCH=amd64
+RUN apt-get update && apt-get install -y openssh-server
+#RUN apt-get install -y python3-pip python3-opencv libxml2-dev libxslt-dev
+#RUN apt-get install -y libtiff5 libpango-1.0-0 libavcodec58 libgdk-pixbuf2.0-0 libjasper1 libqt4-test libpangocairo-1.0-0 libswscale5 libilmbase23 libatk1.0-0 libgtk-3-0 libqtcore4 libcairo2 libwebp6 libavutil56 libcairo-gobject2 libopenexr23 libqtgui4 libavformat58
+#RUN python3 -m pip install --upgrade pip
 #RUN pip3 install opencv-contrib-python
 #RUN pip3 install onvif_zeep
 #RUN pip3 install xmltodict
