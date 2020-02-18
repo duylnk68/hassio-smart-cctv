@@ -79,15 +79,15 @@ def main():
         # Check result each 10s
         if counter >= 5:
             for cam_name, cam_imgs in objDetectPool.GetResults().items():
-                subject = config.email.Subject
-                subject = subject.replace("{CAMERA_NAME}", cam_name)
-                if cam_name in cameras:
-                    subject = subject.replace("{CAMERA_HOST}", cameras[cam_name].Hostname)
-                subject = subject.replace("{EVENT_TYPE}", "Motion Detected")
                 attachments = []
                 for cam_img in cam_imgs:
                     attachments.append(Email.Attachment("capture_%d.jpg" % len(attachments), cam_img))
                 if len(attachments) > 0:
+                    subject = config.email.Subject
+                    subject = subject.replace("{CAMERA_NAME}", cam_name)
+                    if cam_name in cameras:
+                        subject = subject.replace("{CAMERA_HOST}", cameras[cam_name].Hostname)
+                    subject = subject.replace("{EVENT_TYPE}", "Motion Detected")
                     email.SendMail(config.email.To, subject, mail_body, attachments)
         else:
             counter = counter + 1
