@@ -12,7 +12,7 @@ RUN apt-get update && apt-get install -y openssh-server
 RUN apt-get install -y python3-pip python3-opencv libxml2-dev libxslt-dev
 RUN python3 -m pip install --upgrade pip
 RUN echo "[global]" >> /etc/pip.conf
-RUN echo "extra-index-url=https://www.piwheels.org/simple" >> /etc/profile
+RUN echo "extra-index-url=https://www.piwheels.org/simple" >> /etc/pip.conf
 RUN pip3 install opencv-contrib-python
 RUN pip3 install onvif_zeep
 RUN pip3 install xmltodict
