@@ -5,3 +5,5 @@ cmake . -DALLOW_IN_SOURCE_BUILD=1
 make
 make install
 ln -s /usr/local/lib/libjasper.so.4 /usr/lib/libjasper.so.1
+
+ssh myuser@hostname screen -d -m python somepath.py
