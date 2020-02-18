@@ -1,12 +1,16 @@
+import multiprocessing
+import math
 import os.path
 from datetime import timedelta, datetime
 import time
 from camera import Camera
 from sendmail import Email
 from config import Config
-from obj_detect import ObjDetect
+from obj_detect_pool import ObjDetectPool
 
 def main():
+    mail_body = "This is an automatically generated e-mail from AI system."
+
     # Load configuration
     config = None
     if os.path.isfile('config.yaml'):
@@ -28,12 +32,41 @@ def main():
         camera.start()
 
     # Load Object detect!
-    objDetect = ObjDetect("frozen_inference_graph.pb", "frozen_inference_graph.pbtxt")
+    objDetectPool = ObjDetectPool(int(math.ceil(multiprocessing.cpu_count() / 2)), 
+                    "frozen_inference_graph.pb",
+                    "frozen_inference_graph.pbtxt")
+
+    # Wait a little bit!
+    time.sleep(2)
+
+    # Email start status
+    attachments = []
+    for name, camera in cameras.items():
+        # Take a image!
+        image = camera.CaptureImage()
+
+        # Check if succeed!
+        if image is None:
+            continue
+
+        # Add to attachment!
+        attachments.append(Email.Attachment("%s.jpg" % name, image))
+
+    # Mail
+    subject = config.email.Subject
+    subject = subject.replace("{CAMERA_NAME}", "ALL")
+    subject = subject.replace("{CAMERA_HOST}", "NONE")
+    subject = subject.replace("{EVENT_TYPE}", "System Start")
+    email.SendMail(config.email.To, subject, mail_body, attachments)
+    
+    # Delete some variables for safety!
+    del attachments
+    del subject
 
     # Run detector
-    time.sleep(2)
+    counter = 0
     while True:
-        time.sleep(0.1)
+        time.sleep(0.5)
         for name, camera in cameras.items():
             if camera.IsMotion is True:
                 # Take a image!
@@ -41,17 +74,22 @@ def main():
 
                 # Detect object in this image!
                 if image is not None:
-                    image = objDetect.Detect(image)
+                    objDetectPool.Detect(name, image)
 
-                # Send email!
-                if image is not None:
-                    subject = config.email.Subject
-                    subject = subject.replace("{CAMERA_NAME}", name)
-                    subject = subject.replace("{CAMERA_HOST}", camera.Hostname)
-                    subject = subject.replace("{EVENT_TYPE}", "Motion Detected")
-                    attachments = [ Email.Attachment("capture.jpg", image) ]
-                    email.SendMail(config.email.To, subject, "", attachments)
-                    print(subject)
+        # Check result each 2 cycle
+        if counter >= 2:
+            for cam_name, cam_imgs in objDetectPool.GetResults().items():
+                subject = config.email.Subject
+                subject = subject.replace("{CAMERA_NAME}", cam_name)
+                if cam_name in cameras:
+                    subject = subject.replace("{CAMERA_HOST}", cameras[cam_name].Hostname)
+                subject = subject.replace("{EVENT_TYPE}", "Motion Detected")
+                attachments = []
+                for cam_img in cam_imgs:
+                    attachments.append(Email.Attachment("capture_%d.jpg" % len(attachments), cam_img))
+                email.SendMail(config.email.To, subject, mail_body, attachments)
+        else:
+            counter = counter + 1
 
 if __name__ == "__main__":
     main()

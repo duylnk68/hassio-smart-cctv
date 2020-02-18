@@ -5,6 +5,7 @@ from email.mime.base import MIMEBase
 from email import encoders
 import threading
 import queue
+import time
 
 class Email(threading.Thread):
     class Attachment:
@@ -33,7 +34,6 @@ class Email(threading.Thread):
     _smtp_tls = False
     _smtp_user = None
     _smtp_pass = None
-    _event = threading.Event()
     _keep_running = True
     _queue = queue.Queue()
 
@@ -50,12 +50,31 @@ class Email(threading.Thread):
         while self._keep_running:
             # Wait!
             if self._queue.empty():
-                self._event.wait(1)
+                time.sleep(2)
                 continue
             
-            # Send mail!
+            # Try send mail
             try:
-                self._SendEmail(self._queue.get())
+                # creates SMTP session 
+                smtp = smtplib.SMTP(self._smtp_host, self._smtp_port)
+
+                # Start TLS?
+                if self._smtp_tls is True:
+                    smtp.starttls()
+
+                # Authentication 
+                smtp.login(self._smtp_user, self._smtp_pass) 
+
+                # Send all
+                while not self._queue.empty():
+                    # Send
+                    try:
+                        self._SendEmail(smtp, self._queue.get())
+                    except:
+                        break
+
+                # Terminating the session
+                smtp.quit()
             except:
                 pass
 
@@ -63,7 +82,7 @@ class Email(threading.Thread):
         _message = Email._Message(to, subject, body, attachments)
         self._queue.put(_message)
 
-    def _SendEmail(self, _message : _Message):
+    def _SendEmail(self, _smtp: smtplib.SMTP, _message : _Message):
         # Create instance of MIMEMultipart 
         msg = MIMEMultipart() 
 
@@ -97,18 +116,5 @@ class Email(threading.Thread):
                 # attach the instance 'p' to instance 'msg' 
                 msg.attach(attachment)
 
-        # creates SMTP session 
-        smtp = smtplib.SMTP(self._smtp_host, self._smtp_port)
-
-        # Start TLS?
-        if self._smtp_tls is True:
-            smtp.starttls()
-
-        # Authentication 
-        smtp.login(self._smtp_user, self._smtp_pass) 
-
         # sending the mail 
-        smtp.sendmail(self._smtp_user, _message.To, msg.as_string()) 
-
-        # Terminating the session
-        smtp.quit()
+        _smtp.sendmail(self._smtp_user, _message.To, msg.as_string()) 
