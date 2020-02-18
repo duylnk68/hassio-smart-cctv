@@ -10,13 +10,20 @@ ARG DEBIAN_FRONTEND=noninteractive
 # Initialize package
 RUN apt-get update && apt-get install -y openssh-server
 RUN apt-get install -y python3-pip python3-opencv libxml2-dev libxslt-dev
+RUN apt-get install -y git cmake libqtgui4 libqt4-test libqtcore4 libgstreamer1.0-0
 RUN python3 -m pip install --upgrade pip
 RUN echo "[global]" >> /etc/pip.conf
 RUN echo "extra-index-url=https://www.piwheels.org/simple" >> /etc/pip.conf
-RUN pip3 install opencv-contrib-python
+RUN pip3 install opencv-contrib-python==3.4.2.16
 RUN pip3 install onvif_zeep
 RUN pip3 install xmltodict
 RUN pip3 install pyyaml
+RUN git clone https://github.com/mdadams/jasper
+RUN cd jasper
+RUN cmake . -DALLOW_IN_SOURCE_BUILD=1
+RUN make
+RUN make install
+RUN ln -s /usr/local/lib/libjasper.so.4 /usr/lib/libjasper.so.1
 
 # Initialize OpenSSH
 RUN mkdir /var/run/sshd
@@ -31,7 +38,7 @@ ENV NOTVISIBLE "in users profile"
 RUN echo "export VISIBLE=now" >> /etc/profile
 
 # Copy src to $HOME
-ADD src $HOME
+ADD src /root
 
 EXPOSE 22
 CMD ["/usr/sbin/sshd", "-D"]
