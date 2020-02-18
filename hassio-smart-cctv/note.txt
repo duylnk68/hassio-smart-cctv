@@ -1,0 +1,7 @@
+git cmake libqtgui4 libqt4-test libqtcore4 
+git clone https://github.com/mdadams/jasper
+cd jasper
+cmake . -DALLOW_IN_SOURCE_BUILD=1
+make
+make install
+ln -s /usr/local/lib/libjasper.so.4 /usr/lib/libjasper.so.1
