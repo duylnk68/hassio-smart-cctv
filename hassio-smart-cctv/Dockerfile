@@ -10,7 +10,7 @@ ARG DEBIAN_FRONTEND=noninteractive
 # Initialize package
 RUN apt-get update && apt-get install -y openssh-server
 RUN apt-get install -y python3-pip python3-opencv libxml2-dev libxslt-dev
-RUN apt-get install -y git cmake libqtgui4 libqt4-test libqtcore4 libgstreamer1.0-0
+RUN apt-get install -y git cmake libqtgui4 libqt4-test libqtcore4 libgstreamer1.0-0 libatlas3-base
 RUN python3 -m pip install --upgrade pip
 RUN echo "[global]" >> /etc/pip.conf
 RUN echo "extra-index-url=https://www.piwheels.org/simple" >> /etc/pip.conf
