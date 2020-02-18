@@ -19,7 +19,7 @@ class ObjDetectPool:
         objDetect = ObjDetect(self._modelFile, self._configFile)
         while True:
             data_id, data = self._unprocessedQueue.get()
-            #data = objDetect.Detect(data)
+            data = objDetect.Detect(data)
             if data is None:
                 continue
             self._resultDict[data_id].append(data)
