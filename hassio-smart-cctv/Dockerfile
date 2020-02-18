@@ -18,11 +18,10 @@ RUN pip3 install opencv-contrib-python==3.4.2.16
 RUN pip3 install onvif_zeep
 RUN pip3 install xmltodict
 RUN pip3 install pyyaml
-RUN git clone https://github.com/mdadams/jasper
-RUN cd jasper
-RUN cmake . -DALLOW_IN_SOURCE_BUILD=1
-RUN make
-RUN make install
+RUN cd /tmp && git clone https://github.com/mdadams/jasper
+RUN cd /tmp/jasper && cmake . -DALLOW_IN_SOURCE_BUILD=1
+RUN cd /tmp/jasper && make
+RUN cd /tmp/jasper && make install
 RUN ln -s /usr/local/lib/libjasper.so.4 /usr/lib/libjasper.so.1
 
 # Initialize OpenSSH
