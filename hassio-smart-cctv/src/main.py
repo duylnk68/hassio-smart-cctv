@@ -66,7 +66,7 @@ def main():
     # Run detector
     counter = 0
     while True:
-        time.sleep(0.5)
+        time.sleep(1)
         for name, camera in cameras.items():
             if camera.IsMotion is True:
                 # Take a image!
@@ -76,8 +76,8 @@ def main():
                 if image is not None:
                     objDetectPool.Detect(name, image)
 
-        # Check result each 2 cycle
-        if counter >= 2:
+        # Check result each 10s
+        if counter >= 5:
             for cam_name, cam_imgs in objDetectPool.GetResults().items():
                 subject = config.email.Subject
                 subject = subject.replace("{CAMERA_NAME}", cam_name)
@@ -87,7 +87,8 @@ def main():
                 attachments = []
                 for cam_img in cam_imgs:
                     attachments.append(Email.Attachment("capture_%d.jpg" % len(attachments), cam_img))
-                email.SendMail(config.email.To, subject, mail_body, attachments)
+                if len(attachments) > 0:
+                    email.SendMail(config.email.To, subject, mail_body, attachments)
         else:
             counter = counter + 1
 
