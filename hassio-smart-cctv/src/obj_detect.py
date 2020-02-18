@@ -41,14 +41,15 @@ class ObjDetect:
         for detection in output[0, 0, :, :]:
             confidence = detection[2]
             if confidence > .5:
-                isDetected = True
                 class_name = self.id_class_name(detection[1])
-                box_x = detection[3] * image_width
-                box_y = detection[4] * image_height
-                box_width = detection[5] * image_width
-                box_height = detection[6] * image_height
-                cv2.rectangle(image, (int(box_x), int(box_y)), (int(box_width), int(box_height)), (23, 230, 210), thickness=1)
-                cv2.putText(image, class_name,(int(box_x), int(box_y)), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 0, 255)) 
+                if class_name in ["person", "dog", "bicycle", "car", "motorcycle"]:
+                    isDetected = True
+                    box_x = detection[3] * image_width
+                    box_y = detection[4] * image_height
+                    box_width = detection[5] * image_width
+                    box_height = detection[6] * image_height
+                    cv2.rectangle(image, (int(box_x), int(box_y)), (int(box_width), int(box_height)), (23, 230, 210), thickness=1)
+                    cv2.putText(image, class_name,(int(box_x), int(box_y)), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 0, 255)) 
         if isDetected is True:
             _, buffer = cv2.imencode('.jpg', image)
             return buffer.tobytes()

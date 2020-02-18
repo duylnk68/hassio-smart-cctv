@@ -37,7 +37,7 @@ def main():
                     "frozen_inference_graph.pbtxt")
 
     # Wait a little bit!
-    time.sleep(2)
+    time.sleep(10)
 
     # Email start status
     attachments = []
