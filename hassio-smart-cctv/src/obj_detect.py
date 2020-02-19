@@ -32,8 +32,8 @@ class ObjDetect:
         # Loading model
         self._Model = cv2.dnn.readNetFromTensorflow(modelFile, configFile)
     
-    def Detect(self, data):
-        image = cv2.imdecode(np.fromstring(data, dtype=np.uint8), -1)
+    def Detect(self, image_bytes, detect_list):
+        image = cv2.imdecode(np.frombuffer(image_bytes, dtype=np.uint8), -1)
         image_height, image_width, _ = image.shape
         self._Model.setInput(cv2.dnn.blobFromImage(image, size=(300, 300), swapRB=True))
         output = self._Model.forward()
@@ -42,7 +42,7 @@ class ObjDetect:
             confidence = detection[2]
             if confidence > .5:
                 class_name = self.id_class_name(detection[1])
-                if class_name in ["person", "dog", "bicycle", "car", "motorcycle"]:
+                if class_name in detect_list:
                     isDetected = True
                     box_x = detection[3] * image_width
                     box_y = detection[4] * image_height
@@ -54,3 +54,14 @@ class ObjDetect:
             _, buffer = cv2.imencode('.jpg', image)
             return buffer.tobytes()
         return None
+
+
+def test_ObjDetect():
+    objDetect = ObjDetect("frozen_inference_graph.pb", "frozen_inference_graph.pbtxt")
+    with open("sample.jpeg", "rb") as in_file, open("result.jpeg", "wb") as out_file:
+        detected_image = objDetect.Detect(in_file.read(), objDetect._ClassNames.values())
+        if detected_image is not None:
+            out_file.write(detected_image)
+
+if __name__ == "__main__":
+    test_ObjDetect()

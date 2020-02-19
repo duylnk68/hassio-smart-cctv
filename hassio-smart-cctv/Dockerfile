@@ -40,4 +40,5 @@ RUN echo "export VISIBLE=now" >> /etc/profile
 ADD src /root
 
 EXPOSE 22
-CMD ["/usr/sbin/sshd", "-D"]
+RUN chmod +x /root/start.sh
+CMD ["/root/start.sh"]

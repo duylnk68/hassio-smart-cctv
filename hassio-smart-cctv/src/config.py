@@ -10,13 +10,15 @@ class Config:
 
     class _Email:
         To = None
-        Subject = None
+        Subject = "[None]"
+        Body = "(null)"
 
     class _Camera:
         Host = None
         Port = None
         Username = None
         Password = None
+        DetectList = None
 
     # Declare class member
     smtp : _SMTP = _SMTP()
@@ -39,7 +41,10 @@ class Config:
 
             # Init Email instance!
             self.email.To = config['Email']['To']
-            self.email.Subject = config['Email']['Subject']
+            if 'Subject' in config['Email']:
+                self.email.Subject = config['Email']['Subject']
+            if 'Body' in config['Email']:
+                self.email.Body = config['Email']['Body']
 
             # Init Cameras
             for camera_name, camera_info in config['Camera'].items():
@@ -48,4 +53,5 @@ class Config:
                 camera.Port = camera_info['Port']
                 camera.Username = camera_info['User']
                 camera.Password = camera_info['Pass']
+                camera.DetectList = camera_info['Detect']
                 self.cameras[camera_name] = camera

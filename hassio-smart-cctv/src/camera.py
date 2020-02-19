@@ -9,6 +9,7 @@ import datetime
 
 class Camera(transports.Transport, threading.Thread):
     IsMotion = False
+    _IsReady = False
     _SnapshotUri = None
     _Host = None
     _Port = None
@@ -18,21 +19,16 @@ class Camera(transports.Transport, threading.Thread):
     _PullMsgLimit = 1
     _PullMsgTimeout = datetime.timedelta(seconds=1)
     _TransportTimeout = 10
+    _Tag = None
     
-    def __init__(self, host, port, user, pwd):
+    def __init__(self, host, port, user, pwd, tag):
         threading.Thread.__init__(self)
         transports.Transport.__init__(self, timeout=self._TransportTimeout, operation_timeout=self._TransportTimeout)
         self._Host = host
         self._Port = port
         self._User = user
         self._Pwd = pwd
-
-        # Patch zeep.xsd.AnySimpleType.pythonvalue 
-        zeep.xsd.AnySimpleType.pythonvalue = self._patched_zeep_pythonvalue
-
-    # Work arround: NotImplementedError: AnySimpleType.pytonvalue() not implemented
-    def _patched_zeep_pythonvalue(self, xmlvalue):
-        return xmlvalue
+        self._Tag = tag
 
     def post(self, address, message, headers):
         self.xml_request = message.decode('utf-8')
@@ -43,6 +39,14 @@ class Camera(transports.Transport, threading.Thread):
     @property
     def Hostname(self):
         return self._Host
+
+    @property
+    def IsReady(self):
+        return self._IsReady
+
+    @property
+    def Tag(self):
+        return self._Tag
 
     def getSnapshotUri(self, cam: ONVIFCamera):
         media = cam.create_media_service()
@@ -60,6 +64,7 @@ class Camera(transports.Transport, threading.Thread):
             return requests.get(self._SnapshotUri, auth=(self._User, self._Pwd)).content
 
     def _Loop(self):
+        self._IsReady = False
         self._log('i', "Initializing...")
         cam = ONVIFCamera(self._Host, self._Port, self._User, self._Pwd, './wsdl/', transport=self)
         self._log('i', "Getting Snapshot Uri...")
@@ -67,6 +72,7 @@ class Camera(transports.Transport, threading.Thread):
         self._log('i', "Creating PullPoint Service...")
         pullpoint = cam.create_pullpoint_service()
         self._log('i', "The operation completed successfully!")
+        self._IsReady = True
         while(True):
             # Pull message!
             pullpoint.PullMessages({"Timeout":self._PullMsgTimeout, "MessageLimit":self._PullMsgLimit})

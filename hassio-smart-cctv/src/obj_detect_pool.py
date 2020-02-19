@@ -18,21 +18,21 @@ class ObjDetectPool:
     def _ThreadProc(self, thread_id):
         objDetect = ObjDetect(self._modelFile, self._configFile)
         while True:
-            data_id, data = self._unprocessedQueue.get()
-            data = objDetect.Detect(data)
-            if data is None:
+            name, image, detect_list = self._unprocessedQueue.get()
+            image = objDetect.Detect(image, detect_list)
+            if image is None:
                 continue
-            self._resultDict[data_id].append(data)
+            self._resultDict[name].append(image)
 
-    def Detect(self, data_id, data):
-        if data_id not in self._resultDict:
-            self._resultDict[data_id] = []
-        self._unprocessedQueue.put((data_id, data))
+    def Detect(self, name, image, detect_list):
+        if name not in self._resultDict:
+            self._resultDict[name] = []
+        self._unprocessedQueue.put((name, image, detect_list))
         return
 
     def GetResults(self):
         result = dict()
-        for key in self._resultDict:
-            result[key] = self._resultDict[key]
-            self._resultDict[key] = []
+        for name in self._resultDict:
+            result[name] = self._resultDict[name]
+            self._resultDict[name] = []
         return result
