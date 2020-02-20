@@ -37,7 +37,8 @@ def main():
         camera.start()
 
     # Load Object detect!
-    objDetectPool = ObjDetectPool(int(math.ceil(multiprocessing.cpu_count() / 2)), 
+    #objDetectPool = ObjDetectPool(int(math.ceil(multiprocessing.cpu_count() / 2)), 
+    objDetectPool = ObjDetectPool(1,
                     "frozen_inference_graph.pb",
                     "frozen_inference_graph.pbtxt")
 
