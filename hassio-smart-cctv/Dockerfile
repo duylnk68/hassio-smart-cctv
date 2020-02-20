@@ -22,6 +22,7 @@ RUN cd /tmp && git clone https://github.com/mdadams/jasper
 RUN cd /tmp/jasper && cmake . -DALLOW_IN_SOURCE_BUILD=1
 RUN cd /tmp/jasper && make
 RUN cd /tmp/jasper && make install
+RUN rm -rf /tmp/jasper
 RUN ln -s /usr/local/lib/libjasper.so.4 /usr/lib/libjasper.so.1
 
 # Initialize OpenSSH
