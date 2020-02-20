@@ -38,6 +38,7 @@ RUN echo "export VISIBLE=now" >> /etc/profile
 
 # Copy src to $HOME
 ADD src /root
+ADD start.sh /root
 
 EXPOSE 22
 RUN chmod +x /root/start.sh

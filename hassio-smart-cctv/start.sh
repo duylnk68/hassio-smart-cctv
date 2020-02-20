@@ -1,4 +1,4 @@
 #!/bin/bash
 
 /usr/sbin/sshd -D
-python3 main.py
+/usr/bin/python3 /root/main.py
