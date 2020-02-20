@@ -8,7 +8,8 @@ import time
 import datetime
 
 class Camera(transports.Transport, threading.Thread):
-    IsMotion = False
+    _IsMotion = False
+    _LastChanged = datetime.datetime.now()
     _IsReady = False
     _SnapshotUri = None
     _Host = None
@@ -48,6 +49,14 @@ class Camera(transports.Transport, threading.Thread):
     def Tag(self):
         return self._Tag
 
+    @property
+    def IsMotion(self):
+        return self._IsMotion
+
+    @property
+    def LastChanged(self):
+        return self._LastChanged
+
     def getSnapshotUri(self, cam: ONVIFCamera):
         media = cam.create_media_service()
         profiles = media.GetProfiles()
@@ -58,10 +67,13 @@ class Camera(transports.Transport, threading.Thread):
         print("[%c][%s:%d] - %s" % (prefix, self._Host, self._Port, msg))
 
     def CaptureImage(self):
-        if self._SnapshotUri is None:
+        try:
+            if self._SnapshotUri is None:
+                return None
+            else:
+                return requests.get(self._SnapshotUri, auth=(self._User, self._Pwd)).content
+        except:
             return None
-        else:
-            return requests.get(self._SnapshotUri, auth=(self._User, self._Pwd)).content
 
     def _Loop(self):
         self._IsReady = False
@@ -130,7 +142,10 @@ class Camera(transports.Transport, threading.Thread):
                 continue
 
             # Update self.IsMotion
-            self.IsMotion = "true" == simpleItemValue
+            motionStatus = "true" == simpleItemValue
+            if motionStatus != self._IsMotion:
+                self._IsMotion = motionStatus
+                self._LastChanged = datetime.datetime.now()
 
     def run(self):
         while(self._KeepRunning):

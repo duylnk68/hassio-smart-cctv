@@ -1,7 +1,7 @@
 import multiprocessing
 import math
 import os.path
-from datetime import timedelta, datetime
+import datetime
 import time
 from zeep_patch import ZeepPatch
 from camera import Camera
@@ -29,7 +29,8 @@ def main():
     for name, camera in config.cameras.items():
         if camera.DetectList is None:
             continue
-        cameras[name] = Camera(camera.Host, camera.Port, camera.Username, camera.Password, camera.DetectList)
+        cameraTag = { "detect_list": camera.DetectList, "last_notify": datetime.datetime.min }
+        cameras[name] = Camera(camera.Host, camera.Port, camera.Username, camera.Password, cameraTag)
 
     # Start all camera
     for camera in cameras.values():
@@ -74,18 +75,31 @@ def main():
     # Run detector
     counter = 0
     while True:
-        time.sleep(1)
+        time.sleep(0.9)
         for name, camera in cameras.items():
-            if camera.IsMotion is True:
-                # Take a image!
-                image = camera.CaptureImage()
+            # Check motion status
+            if camera.IsMotion is not True:
+                continue
 
-                # Detect object in this image!
-                if image is not None:
-                    objDetectPool.Detect(name, image, camera.Tag)
+            # Prevent mail spam!
+            currentTime = datetime.datetime.now()
+            secondsSinceLastMotion = (currentTime - camera.LastChanged).total_seconds()
+            if secondsSinceLastMotion > 5:
+                secondsSinceLastNotified = (currentTime - camera.Tag["last_notify"]).total_seconds()
+                if secondsSinceLastNotified <= 60:
+                    continue
+
+            # Take and detect object in a image!
+            image = camera.CaptureImage()
+            if image is not None:
+                # Add to object detect worker pool
+                objDetectPool.Detect(name, image, camera.Tag["detect_list"])
+                # Reset last_notify to currentTime
+                camera.Tag["last_notify"] = currentTime
 
         # Check result each 5s
         if counter >= 5:
+            # Send all pending image!
             for cam_name, cam_imgs in objDetectPool.GetResults().items():
                 attachments = []
                 for cam_img in cam_imgs:
@@ -98,6 +112,9 @@ def main():
                     subject = subject.replace("{EVENT_TYPE}", "Motion Detected")
                     email.SendMail(config.email.To, subject, config.email.Body, attachments)
                     print(subject)
+
+            # Reset counter
+            counter = 0
         else:
             counter = counter + 1
 
