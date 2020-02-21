@@ -7,3 +7,11 @@ make install
 ln -s /usr/local/lib/libjasper.so.4 /usr/lib/libjasper.so.1
 
 ssh myuser@hostname screen -d -m python somepath.py
+============================================================
+Install OpenCV ver.4.1.0.25
+sudo pip3 install opencv-contrib-python==4.1.0.25
+Reason why Installing ver:4.1.0.25 is lastest version of opencv-python has a bug at using import statment. If you want to use lastes(4.1.1.26) and to solve it, use command below
+
+export LD_PRELOAD=/usr/lib/arm-linux-gnueabihf/libatomic.so.1
+Install dependency libraries
+sudo apt install libqt4-test libhdf5-dev libatlas-base-dev libjasper-dev libqtgui4
