@@ -1,4 +1,4 @@
 #!/bin/bash
 
-/usr/sbin/sshd
-/usr/bin/python3 /root/main.py
+/usr/bin/screen -d -m /usr/bin/python3 /root/main.py
+/usr/sbin/sshd -D
