@@ -14,7 +14,7 @@ RUN apt-get install -y git cmake libqtgui4 libqt4-test libqtcore4 libgstreamer1.
 RUN python3 -m pip install --upgrade pip
 RUN echo "[global]" >> /etc/pip.conf
 RUN echo "extra-index-url=https://www.piwheels.org/simple" >> /etc/pip.conf
-RUN pip3 install opencv-contrib-python==3.4.2.16
+RUN pip3 install opencv-contrib-python==4.1.0.25
 RUN pip3 install onvif_zeep
 RUN pip3 install xmltodict
 RUN pip3 install pyyaml
