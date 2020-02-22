@@ -8,22 +8,32 @@ SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 ARG DEBIAN_FRONTEND=noninteractive
 
 # Initialize package
-RUN apt-get update && apt-get install -y openssh-server screen nano
-RUN apt-get install -y python3-pip python3-opencv libxml2-dev libxslt-dev
-RUN apt-get install -y git cmake libqtgui4 libqt4-test libqtcore4 libgstreamer1.0-0 libatlas3-base
+RUN apt-get update && apt-get install -y openssh-server screen nano python3-pip \
+                                         libxml2-dev libxslt-dev \ 
+                                         libatlas3-base libopenexr-dev libilmbase-dev \
+                                         libjpeg62 libwebp-dev libtiff-dev \
+                                         libavcodec-dev libavformat-dev libswscale-dev \
+                                         libqtgui4 libqt4-test libqtcore4 \
+                                         libgstreamer1.0-dev \
+                                         git cmake
+
 RUN python3 -m pip install --upgrade pip
-RUN echo "[global]" >> /etc/pip.conf
-RUN echo "extra-index-url=https://www.piwheels.org/simple" >> /etc/pip.conf
-RUN pip3 install opencv-contrib-python==4.1.0.25
-RUN pip3 install onvif_zeep
-RUN pip3 install xmltodict
-RUN pip3 install pyyaml
-RUN cd /tmp && git clone https://github.com/mdadams/jasper
-RUN cd /tmp/jasper && cmake . -DALLOW_IN_SOURCE_BUILD=1
-RUN cd /tmp/jasper && make
-RUN cd /tmp/jasper && make install
-RUN rm -rf /tmp/jasper
-RUN ln -s /usr/local/lib/libjasper.so.4 /usr/lib/libjasper.so.1
+RUN echo "[global]" > /etc/pip.conf \
+    && echo "extra-index-url=https://www.piwheels.org/simple" >> /etc/pip.conf
+
+RUN pip3 install opencv-python==4.1.0.25 \
+                 opencv-contrib-python==4.1.0.25 \
+                 onvif_zeep \
+                 xmltodict \
+                 pyyaml
+
+RUN cd /tmp \
+    && git clone https://github.com/mdadams/jasper \
+    && cd jasper \
+    && cmake . -DALLOW_IN_SOURCE_BUILD=1 \
+    && make && make install \
+    && rm -rf jasper \
+    && ln -s /usr/local/lib/libjasper.so.4 /usr/lib/libjasper.so.1
 
 # Initialize OpenSSH
 RUN mkdir /var/run/sshd
