@@ -21,6 +21,7 @@ class ObjDetect:
               80: 'toaster', 81: 'sink', 82: 'refrigerator', 84: 'book', 85: 'clock',
               86: 'vase', 87: 'scissors', 88: 'teddy bear', 89: 'hair drier', 90: 'toothbrush'}
     _Model = None
+    _JpegQuality = 95 # OpenCV default value
 
     # Get class_name from class_id
     def id_class_name(self, class_id):
@@ -28,9 +29,11 @@ class ObjDetect:
             if class_id == key:
                 return value
 
-    def __init__(self, modelFile, configFile):
+    def __init__(self, modelFile, configFile, jpegQuality):
         # Loading model
         self._Model = cv2.dnn.readNetFromTensorflow(modelFile, configFile)
+        if jpegQuality > 0:
+            self._JpegQuality = jpegQuality
     
     def Detect(self, image_bytes, detect_list):
         image = cv2.imdecode(np.frombuffer(image_bytes, dtype=np.uint8), -1)
@@ -51,13 +54,13 @@ class ObjDetect:
                     cv2.rectangle(image, (int(box_x), int(box_y)), (int(box_width), int(box_height)), (23, 230, 210), thickness=1)
                     cv2.putText(image, class_name,(int(box_x), int(box_y)), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 0, 255)) 
         if isDetected is True:
-            _, buffer = cv2.imencode('.jpg', image)
+            _, buffer = cv2.imencode('.jpg', image, [int(cv2.IMWRITE_JPEG_QUALITY), self._JpegQuality])
             return buffer.tobytes()
         return None
 
 
 def test_ObjDetect():
-    objDetect = ObjDetect("frozen_inference_graph.pb", "frozen_inference_graph.pbtxt")
+    objDetect = ObjDetect("frozen_inference_graph.pb", "frozen_inference_graph.pbtxt", 0)
     with open("sample.jpeg", "rb") as in_file, open("result.jpeg", "wb") as out_file:
         detected_image = objDetect.Detect(in_file.read(), objDetect._ClassNames.values())
         if detected_image is not None:

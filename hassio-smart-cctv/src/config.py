@@ -1,4 +1,6 @@
 import yaml
+import math
+import multiprocessing
 
 class Config:
     class _SMTP:
@@ -20,10 +22,17 @@ class Config:
         Password = None
         DetectList = None
 
+    class _OpenCV:
+        Instances = int(math.ceil(multiprocessing.cpu_count() / 2))
+        PB = "frozen_inference_graph.pb"
+        PBTXT = "frozen_inference_graph.pbtxt"
+        JpegQuality = 95
+
     # Declare class member
     smtp : _SMTP = _SMTP()
     email : _Email = _Email()
     cameras = dict()
+    opencv = _OpenCV()
 
     # Constructor
     def __init__(self, config_path):
@@ -45,6 +54,17 @@ class Config:
                 self.email.Subject = config['Email']['Subject']
             if 'Body' in config['Email']:
                 self.email.Body = config['Email']['Body']
+
+            # Init OpenCV
+            if ('OpenCV' in config) and (config['OpenCV'] is not None):
+                if "Instances" in config['OpenCV']:
+                    self.opencv.Instances = int(config['OpenCV']['Instances'])
+                if "PB" in config['OpenCV']:
+                    self.opencv.PB = config['OpenCV']['PB']
+                if "PBTXT" in config['OpenCV']:
+                    self.opencv.PBTXT = config['OpenCV']['PBTXT']
+                if "JpegQuality" in config['OpenCV']:
+                    self.opencv.JpegQuality = int(config['OpenCV']['JpegQuality'])
 
             # Init Cameras
             for camera_name, camera_info in config['Camera'].items():

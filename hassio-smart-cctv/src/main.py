@@ -1,5 +1,3 @@
-import multiprocessing
-import math
 import os.path
 import datetime
 import time
@@ -37,10 +35,10 @@ def main():
         camera.start()
 
     # Load Object detect!
-    #objDetectPool = ObjDetectPool(int(math.ceil(multiprocessing.cpu_count() / 2)), 
-    objDetectPool = ObjDetectPool(1,
-                    "frozen_inference_graph.pb",
-                    "frozen_inference_graph.pbtxt")
+    objDetectPool = ObjDetectPool(config.opencv.Instances,
+                    config.opencv.PB,
+                    config.opencv.PBTXT,
+                    config.opencv.JpegQuality)
 
     # Wait a little bit!
     time.sleep(10)
