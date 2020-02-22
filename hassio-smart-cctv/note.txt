@@ -15,3 +15,7 @@ Reason why Installing ver:4.1.0.25 is lastest version of opencv-python has a bug
 export LD_PRELOAD=/usr/lib/arm-linux-gnueabihf/libatomic.so.1
 Install dependency libraries
 sudo apt install libqt4-test libhdf5-dev libatlas-base-dev libjasper-dev libqtgui4
+
+============================================================
+venv on Windows:
+python -m venv venv
