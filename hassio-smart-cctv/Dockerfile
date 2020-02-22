@@ -15,6 +15,7 @@ RUN apt-get update && apt-get install -y openssh-server screen nano python3-pip 
                                          libavcodec-dev libavformat-dev libswscale-dev \
                                          libqtgui4 libqt4-test libqtcore4 \
                                          libgstreamer1.0-dev \
+                                         libhdf5-dev \
                                          git cmake
 
 RUN python3 -m pip install --upgrade pip
