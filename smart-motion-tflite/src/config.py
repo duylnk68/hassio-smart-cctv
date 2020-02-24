@@ -25,6 +25,7 @@ class Config:
     class _TFLite:
         Instances = int(math.ceil(multiprocessing.cpu_count() / 2))
         Model = "model.tflite"
+        Label = "coco_labels.txt"
         Threshold = 0.4
         JpegQuality = 95
 

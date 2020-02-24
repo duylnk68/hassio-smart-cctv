@@ -35,10 +35,11 @@ def main():
         camera.start()
 
     # Load Object detect!
-    objDetectPool = ObjDetectPool(config.opencv.Instances,
-                    config.opencv.PB,
-                    config.opencv.PBTXT,
-                    config.opencv.JpegQuality)
+    objDetectPool = ObjDetectPool(config.tflite.Instances,
+                    config.tflite.Model,
+                    config.tflite.Label,
+                    config.tflite.Threshold,
+                    config.tflite.JpegQuality)
 
     # Wait a little bit!
     time.sleep(10)
