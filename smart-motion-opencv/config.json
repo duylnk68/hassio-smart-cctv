@@ -1,8 +1,8 @@
 {
-  "name": "hassio-smart-cctv",
+  "name": "smart-motion-opencv",
   "version": "1.0.0",
-  "slug": "hassio-smart-cctv",
-  "description": "Hassio Smart CCTV",
+  "slug": "smart-motion-opencv",
+  "description": "Hassio Smart CCTV (core OpenCV)",
   "url": "https://github.com/duylnk68/hassio-smart-cctv",
   "startup": "application",
   "arch": [
