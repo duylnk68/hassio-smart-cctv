@@ -18,6 +18,7 @@ RUN echo "[global]" > /etc/pip.conf \
     && echo "extra-index-url=https://www.piwheels.org/simple" >> /etc/pip.conf
 
 RUN pip3 install https://dl.google.com/coral/python/tflite_runtime-2.1.0.post1-cp37-cp37m-linux_armv7l.whl \
+                 pillow \
                  onvif_zeep \
                  xmltodict \
                  pyyaml
