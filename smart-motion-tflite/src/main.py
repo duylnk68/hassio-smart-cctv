@@ -41,9 +41,6 @@ def main():
                     config.tflite.Threshold,
                     config.tflite.JpegQuality)
 
-    # Wait a little bit!
-    time.sleep(10)
-
     # Email start status
     attachments = []
     for name, camera in cameras.items():
