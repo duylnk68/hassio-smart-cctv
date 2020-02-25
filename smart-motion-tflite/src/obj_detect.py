@@ -52,7 +52,8 @@ class ObjDetect:
         results = self.detect_objects(image)
         CAMERA_WIDTH, CAMERA_HEIGHT = original_image.size
         draw = ImageDraw.Draw(original_image)
-        for obj in results: 
+        hasObjects = False
+        for obj in results:
             # Check class_name is in detect_list?
             class_name = self._labels[obj['class_id']]
             if class_name not in detect_list:
@@ -70,10 +71,17 @@ class ObjDetect:
             draw.rectangle([xmin, ymin, xmax, ymax], outline ="red")
             #draw.text([xmin, ymin - 12], '%s\n%.2f' % (self._labels[obj['class_id']], obj['score']), fill="red")
             draw.text([xmin, ymin - 12], '%s' % class_name, fill="red")
+            
+            # Set hasObjects to True
+            hasObjects = True
         del draw
-        image_bytes_array = io.BytesIO()
-        original_image.save(image_bytes_array, format='JPEG', quality=self._jpeg_quality, subsampling=0)
-        return image_bytes_array.getvalue()
+        
+        if hasObjects:
+            image_bytes_array = io.BytesIO()
+            original_image.save(image_bytes_array, format='JPEG', quality=self._jpeg_quality, subsampling=0)
+            return image_bytes_array.getvalue()
+        else:
+            return None
 
     def load_labels(self, path):
         """Loads the labels file. Supports files with or without index numbers."""
