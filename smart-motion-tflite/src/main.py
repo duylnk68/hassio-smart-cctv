@@ -52,11 +52,13 @@ def main():
             time.sleep(0.01)
 
         # Take a image!
-        image = camera.CaptureImage()
-
-        # Check if succeed!
-        if image is None:
-            continue
+        image = None
+        while True:
+            image = camera.CaptureImage()
+            if image is None:
+                time.sleep(0.01)
+            else:
+                break
 
         # Add to attachment!
         attachments.append(Email.Attachment("%s.jpg" % name, image))
