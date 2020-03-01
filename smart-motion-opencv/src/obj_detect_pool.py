@@ -4,21 +4,25 @@ from obj_detect import ObjDetect
 import time
 
 class ObjDetectPool:
-    _ModelFile = None
-    _ConfigFile = None
+    _PbFile = None
+    _PbTxtFile = None
+    _LabelFile = None
+    _Threshold = 0.5
     _UnprocessedQueue = queue.Queue()
     _ResultDict = dict()
     _JpegQuality = 0
 
-    def __init__(self, threadCount, modelFile, configFile, jpegQuality):
-        self._ModelFile = modelFile
-        self._ConfigFile = configFile
-        self._JpegQuality = jpegQuality
-        for id in range(threadCount):
+    def __init__(self, instances, pb_file, pbtxt_file, label_file, threshold, jpeg_quality):
+        self._PbFile = pb_file
+        self._PbTxtFile = pbtxt_file
+        self._LabelFile = label_file
+        self._Threshold = threshold
+        self._JpegQuality = jpeg_quality
+        for id in range(instances):
             threading.Thread(target=self._ThreadProc, args=(id,)).start()
 
     def _ThreadProc(self, thread_id):
-        objDetect = ObjDetect(self._ModelFile, self._ConfigFile, self._JpegQuality)
+        objDetect = ObjDetect(self._PbFile, self._PbTxtFile, self._LabelFile, self._Threshold, self._JpegQuality)
         while True:
             name, image, detect_list = self._UnprocessedQueue.get()
             image = objDetect.Detect(image, detect_list)

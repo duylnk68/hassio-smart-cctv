@@ -26,6 +26,8 @@ class Config:
         Instances = int(math.ceil(multiprocessing.cpu_count() / 2))
         PB = "frozen_inference_graph.pb"
         PBTXT = "frozen_inference_graph.pbtxt"
+        Label = "coco_labels.txt"
+        Threshold = 0.5
         JpegQuality = 95
 
     # Declare class member
@@ -63,6 +65,10 @@ class Config:
                     self.opencv.PB = config['OpenCV']['PB']
                 if "PBTXT" in config['OpenCV']:
                     self.opencv.PBTXT = config['OpenCV']['PBTXT']
+                if "Label" in config['OpenCV']:
+                    self.opencv.Label = config['OpenCV']['Label']
+                if "Threshold" in config['OpenCV']:
+                    self.opencv.Threshold = config['OpenCV']['Threshold']
                 if "JpegQuality" in config['OpenCV']:
                     self.opencv.JpegQuality = int(config['OpenCV']['JpegQuality'])
 
