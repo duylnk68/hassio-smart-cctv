@@ -1,6 +1,31 @@
 pip3 install pillow
 libjpeg62 libopenjp2-7 libtiff-dev libatlas3-base libopenexr-dev libilmbase-dev
 
+=============================================================
+https://coral.ai/models/
+MobileNet SSD v2 (COCO)
+Detects the location of 90 types of objects
+Dataset: COCO
+Input size: 300x300
+=============================================================
+tflite_convert --enable_v1_converter ^
+               --output_file=model.tflite ^
+               --graph_def_file=tflite_graph.pb ^
+               --output_format=TFLITE ^
+               --input_arrays=normalized_input_image_tensor ^
+               --input_shapes=1,300,300,3 ^
+               --output_arrays="TFLite_Detection_PostProcess,TFLite_Detection_PostProcess:1,TFLite_Detection_PostProcess:2,TFLite_Detection_PostProcess:3" ^
+               --allow_custom_ops
+
+You get a tflite model (float) with 4 outputs. The output_arrays correspond to “detection_boxes, detection_classes, detection_scores, num_boxes”.
+=============================================================
 https://www.tensorflow.org/lite/guide/python
 http://download.tensorflow.org/models/object_detection/ssd_mobilenet_v3_large_coco_2020_01_14.tar.gz
 http://download.tensorflow.org/models/object_detection/ssd_mobilenet_v3_small_coco_2020_01_14.tar.gz
+
+=============================================================
+https://github.com/tensorflow/tensorflow/issues/31015
+You have TF and TF object detection installed
+Downloading and unpacking the file (the model) from model zoo -> cd into the folder (e.g., cd …/ssdlite_mobilenet_v2_coco_2018_05_09)
+python .\models\research\object_detection\export_tflite_ssd_graph.py --pipeline_config_path pipeline.config --trained_checkpoint_prefix model.ckpt --output_directory my_frozen_graph --add_postprocessing_op True
+tflite_convert --graph_def_file=my_frozen_graph/tflite_graph.pb --output_file=detect.tflite --input_shapes=1,300,300,3 --input_arrays=normalized_input_image_tensor --output_arrays=TFLite_Detection_PostProcess,TFLite_Detection_PostProcess:1,TFLite_Detection_PostProcess:2,TFLite_Detection_PostProcess:3 --allow_custom_ops
