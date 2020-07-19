@@ -1,5 +1,6 @@
 from onvif import ONVIFCamera, ONVIFService
 from zeep import transports
+from requests.auth import HTTPDigestAuth
 import zeep
 import threading
 import requests
@@ -12,6 +13,8 @@ class Camera(transports.Transport, threading.Thread):
     _LastChanged = datetime.datetime.now()
     _IsReady = False
     _SnapshotUri = None
+    _SnapshotUsr = None
+    _SnapshotPwd = None
     _Host = None
     _Port = None
     _User = None
@@ -30,6 +33,16 @@ class Camera(transports.Transport, threading.Thread):
         self._User = user
         self._Pwd = pwd
         self._Tag = tag
+        if snap_uri is not None:
+            self._SnapshotUri = "http://%s:%u/%s" % (host, port, snap_uri.lstrip('/'))
+        if snap_usr is not None:
+            self._SnapshotUsr = snap_usr
+        else:
+            self._SnapshotUsr = self._User
+        if snap_pwd is not None:
+            self._SnapshotPwd = snap_pwd
+        else:
+            self._SnapshotPwd = self._Pwd
 
     def post(self, address, message, headers):
         self.xml_request = message.decode('utf-8')
@@ -71,7 +84,10 @@ class Camera(transports.Transport, threading.Thread):
             if self._SnapshotUri is None:
                 return None
             else:
-                return requests.get(self._SnapshotUri, auth=(self._User, self._Pwd)).content
+                request_result = requests.get(self._SnapshotUri, auth=HTTPDigestAuth(self._SnapshotUsr, self._SnapshotPwd))
+                if request_result.status_code is 200:
+                    return request_result.content
+                return None
         except:
             return None
 
@@ -79,8 +95,9 @@ class Camera(transports.Transport, threading.Thread):
         self._IsReady = False
         self._log('i', "Initializing...")
         cam = ONVIFCamera(self._Host, self._Port, self._User, self._Pwd, './wsdl/', transport=self)
-        self._log('i', "Getting Snapshot Uri...")
-        self._SnapshotUri = self.getSnapshotUri(cam).Uri
+        if self._SnapshotUri is None:
+            self._log('i', "Getting Snapshot Uri...")
+            self._SnapshotUri = self.getSnapshotUri(cam).Uri
         self._log('i', "Creating PullPoint Service...")
         pullpoint = cam.create_pullpoint_service()
         self._log('i', "The operation completed successfully!")
