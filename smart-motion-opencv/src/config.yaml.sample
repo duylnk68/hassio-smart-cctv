@@ -1,0 +1,36 @@
+Email:
+    SMTP:
+        Host: smtp.gmail.com
+        Port: 587
+        TLS: true
+        User: <user>@gmail.com
+        Pass: <password>
+    To: 
+        - <mail1>@gmail.com
+        - <mail2>@gmail.com
+    Subject: "[CCTV][{CAMERA_NAME}][{CAMERA_HOST}] - {EVENT_TYPE}"
+    Body: "This is an automatically generated e-mail from AI system."
+
+OpenCV:
+    Instances: 1
+    PB: "ssd_mobilenet.pb"
+    PBTXT: "ssd_mobilenet.pbtxt"
+    JpegQuality: 80
+
+Camera:
+    San Thuong Truoc:
+        Host: <ipcam_onvif_ip_address>
+        Port: <ipcam_onvif_port>
+        User: <onvif_user>
+        Pass: <onvif_password>
+        Snap: # Optional, remove if use builtin onvif snap_uri
+          Uri: /ISAPI/Streaming/channels/101/picture
+          User: <snap_user> # Optional, remove if use the same user with onvif
+          Pass: <snap_pass> # Optional, remove if use the same password with onvif
+        Detect:
+            - person
+            - dog
+            - car
+            - motobike
+            - bicycle
+    
