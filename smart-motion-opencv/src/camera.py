@@ -22,7 +22,7 @@ class Camera(transports.Transport, threading.Thread):
     _TransportTimeout = 10
     _Tag = None
     
-    def __init__(self, host, port, user, pwd, tag):
+    def __init__(self, host, port, user, pwd, snap_uri, snap_usr, snap_pwd, tag):
         threading.Thread.__init__(self)
         transports.Transport.__init__(self, timeout=self._TransportTimeout, operation_timeout=self._TransportTimeout)
         self._Host = host
