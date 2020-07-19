@@ -28,7 +28,14 @@ def main():
         if camera.DetectList is None:
             continue
         cameraTag = { "detect_list": camera.DetectList, "last_notify": datetime.datetime.min }
-        cameras[name] = Camera(camera.Host, camera.Port, camera.Username, camera.Password, cameraTag)
+        cameras[name] = Camera(camera.Host, 
+                                camera.Port, 
+                                camera.Username, 
+                                camera.Password, 
+                                camera.SnapshotUri,
+                                camera.SnapshotUsr,
+                                camera.SnapshotPwd,
+                                cameraTag)
 
     # Start all camera
     for camera in cameras.values():
@@ -57,8 +64,10 @@ def main():
         while True:
             image = camera.CaptureImage()
             if image is None:
+                print("[%s] Image Captured FAIL!" % name)
                 time.sleep(0.01)
             else:
+                print("[%s] Image Captured OK!" % name)
                 break
 
         # Add to attachment!

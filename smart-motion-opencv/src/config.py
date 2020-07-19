@@ -20,6 +20,9 @@ class Config:
         Port = None
         Username = None
         Password = None
+        SnapshotUri = None
+        SnapshotUsr = None
+        SnapshotPwd = None
         DetectList = None
 
     class _OpenCV:
@@ -80,4 +83,10 @@ class Config:
                 camera.Username = camera_info['User']
                 camera.Password = camera_info['Pass']
                 camera.DetectList = camera_info['Detect']
+                if camera_info['Snap'] is not None:
+                    camera.SnapshotUri = camera_info['Snap']['Uri']
+                    if 'User' in camera_info['Snap']:
+                        camera.SnapshotUsr = camera_info['Snap']['User']
+                    if 'Pass' in camera_info['Snap']:
+                        camera.SnapshotPwd = camera_info['Snap']['Pass']
                 self.cameras[camera_name] = camera
