@@ -18,7 +18,7 @@ OpenCV:
     JpegQuality: 80
 
 Camera:
-    San Thuong Truoc:
+    Camera_001:
         Host: <ipcam_onvif_ip_address>
         Port: <ipcam_onvif_port>
         User: <onvif_user>
