@@ -1,9 +1,13 @@
 ARG BUILD_FROM
 FROM golang:latest AS builder
-RUN go get -d -v github.com/cloudflare/cloudflared/cmd/cloudflared
+WORKDIR /tmp
+RUN git clone https://github.com/cloudflare/cloudflared.git
+WORKDIR /tmp/cloudflared
+RUN make cloudflared
 
 FROM $BUILD_FROM
 WORKDIR /root/
-COPY --from=builder /go/bin/cloudflared ./
-ENTRYPOINT [ "./cloudflared" ]
-CMD [ "origincert", "/data/cert.pem", "config", "/data/config.yaml" ]
+COPY --from=builder /tmp/cloudflared/cloudflared ./
+ADD entrypoint.sh entrypoint.sh
+ENTRYPOINT [ "/usr/bin/env", "bashio" ]
+CMD [ "entrypoint.sh" ]
