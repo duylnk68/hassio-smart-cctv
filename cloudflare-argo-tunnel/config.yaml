@@ -13,8 +13,6 @@
   ],
   "boot": "auto",
   "options": {
-    "log_level": "info",
-    "seconds_between_quotes": 5,
     "url": "172.17.0.1:8123",
     "account-tag": "",
     "tunnel-id": "",
@@ -22,8 +20,6 @@
     "tunnel-secret": ""
   },
   "schema": {
-    "log_level": "match(^(trace|debug|info|notice|warning|error|fatal)$)",
-    "seconds_between_quotes": "int(1,120)",
     "url": "str",
     "account-tag": "str",
     "tunnel-id": "str",
