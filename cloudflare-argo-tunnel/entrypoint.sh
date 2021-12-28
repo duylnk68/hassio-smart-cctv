@@ -14,12 +14,12 @@ echo "{
     \"TunnelID\":\"$TunnelID\",
     \"TunnelName\":\"$TunnelName\",
     \"TunnelSecret\":\"$TunnelSecret\"
-}" > /data/$TunnelID.json
+}" > /usr/local/etc/cloudflared/$TunnelID.json
 
 # Create config.yaml
 echo "url: $url
 tunnel: $TunnelID
-credentials-file: /data/$TunnelID.json" > /data/config.yaml
+credentials-file: /usr/local/etc/cloudflared/$TunnelID.json" > /usr/local/etc/cloudflared/config.yaml
 
 # Run
-./cloudflared config /data/config.yaml tunnel run
+./cloudflared tunnel run
