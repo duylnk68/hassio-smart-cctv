@@ -2,7 +2,7 @@
 
 # Environment
 CONFIG_PATH=/data/options.json
-url="$(jq --raw-output '.url' $CONFIG_PATH)
+url=$(jq --raw-output '.url' $CONFIG_PATH)
 AccountTag=$(jq --raw-output '.account-tag' $CONFIG_PATH)
 TunnelID=$(jq --raw-output '.tunnel-id' $CONFIG_PATH)
 TunnelName=$(jq --raw-output '.tunnel-name' $CONFIG_PATH)
