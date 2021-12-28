@@ -13,7 +13,7 @@
   ],
   "boot": "auto",
   "options": {
-    "url": "172.17.0.1:8123",
+    "url": "http://supervisor:8123",
     "account-tag": "",
     "tunnel-id": "",
     "tunnel-name": "",
