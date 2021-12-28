@@ -9,13 +9,13 @@ arch:
 boot: auto
 options:
   url: http://supervisor:8123
-  account-tag:
-  tunnel-id:
-  tunnel-name:
-  tunnel-secret:
+  account_tag:
+  tunnel_id:
+  tunnel_name:
+  tunnel_secret:
 schema:
   url: str
-  account-tag: str
-  tunnel-id: str
-  tunnel-name: str
-  tunnel-secret: str
+  account_tag: str
+  tunnel_id: str
+  tunnel_name: str
+  tunnel_secret: str

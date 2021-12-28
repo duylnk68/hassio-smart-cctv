@@ -3,10 +3,10 @@
 # Environment
 CONFIG_PATH=/data/options.json
 url=$(jq --raw-output '.url' $CONFIG_PATH)
-AccountTag=$(jq --raw-output '.account-tag' $CONFIG_PATH)
-TunnelID=$(jq --raw-output '.tunnel-id' $CONFIG_PATH)
-TunnelName=$(jq --raw-output '.tunnel-name' $CONFIG_PATH)
-TunnelSecret=$(jq --raw-output '.tunnel-secret' $CONFIG_PATH)
+AccountTag=$(jq --raw-output '.account_tag' $CONFIG_PATH)
+TunnelID=$(jq --raw-output '.tunnel_id' $CONFIG_PATH)
+TunnelName=$(jq --raw-output '.tunnel_name' $CONFIG_PATH)
+TunnelSecret=$(jq --raw-output '.tunnel_secret' $CONFIG_PATH)
 
 # Create credentials-file.json
 echo "{
