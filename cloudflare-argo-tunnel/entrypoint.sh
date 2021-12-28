@@ -1,11 +1,12 @@
-#!/usr/bin/env bashio
+#!/usr/bin/env bash
 
 # Environment
-url="$(bashio::config 'url')"
-AccountTag="$(bashio::config 'account-tag')"
-TunnelID="$(bashio::config 'tunnel-id')"
-TunnelName="$(bashio::config 'tunnel-name')"
-TunnelSecret="$(bashio::config 'tunnel-secret')"
+CONFIG_PATH=/data/options.json
+url="$(jq --raw-output '.url' $CONFIG_PATH)
+AccountTag=$(jq --raw-output '.account-tag' $CONFIG_PATH)
+TunnelID=$(jq --raw-output '.tunnel-id' $CONFIG_PATH)
+TunnelName=$(jq --raw-output '.tunnel-name' $CONFIG_PATH)
+TunnelSecret=$(jq --raw-output '.tunnel-secret' $CONFIG_PATH)
 
 # Create credentials-file.json
 echo "{
