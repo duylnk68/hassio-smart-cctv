@@ -22,4 +22,4 @@ tunnel: $TunnelID
 credentials-file: /data/$TunnelID.json" > /data/config.yaml
 
 # Run
-./cloudflared tunnel run --no-autoupdate true --config /data/config.yaml
+./cloudflared tunnel --config /data/config.yaml --no-autoupdate run
