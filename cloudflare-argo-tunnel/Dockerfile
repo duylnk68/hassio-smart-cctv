@@ -1,6 +1,6 @@
 ARG BUILD_FROM
 FROM golang:alpine AS builder
-RUN apk add --no-cache git
+RUN apk add --no-cache git make
 WORKDIR /tmp
 RUN git clone https://github.com/cloudflare/cloudflared.git
 WORKDIR /tmp/cloudflared
