@@ -7,3 +7,5 @@ startup: application
 arch:
   - armv7
 boot: auto
+map:
+  - data
