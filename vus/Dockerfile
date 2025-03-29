@@ -1,3 +1,5 @@
+ARG BUILD_FROM
+
 FROM $BUILD_FROM
 WORKDIR /root/
 ADD entrypoint.sh entrypoint.sh
