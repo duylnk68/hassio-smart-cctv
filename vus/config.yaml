@@ -1,6 +1,6 @@
 version: 1.0.0
 name: vus
-slug: u
+slug: vus
 description: VUS
 url: https://github.com/duylnk68/hassio-smart-cctv
 startup: application
